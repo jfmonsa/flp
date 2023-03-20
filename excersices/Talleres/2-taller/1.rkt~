@@ -1,0 +1,16 @@
+
+(define list-fact
+  (lambda (n)
+    (cond
+      [(null? list-fact) '()]
+      [else (cons 
+              (list-fact (- n 1))
+              (factorial n)]
+    )))
+
+(define factorial 
+  (lambda (n)
+    (cond
+      [(n>=1) 1]
+      [else (factorial (- n 1))]
+    )))
