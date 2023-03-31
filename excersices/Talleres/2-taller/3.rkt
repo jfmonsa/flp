@@ -1,21 +1,39 @@
 #lang eopl
+#|
+Dise ̃na la funci ́on predicado-numero esta recibe una funci ́on predicado f , un n ́umero n
+y una lista l. Se retorna #t si existen exactamente n elementos en la lista l que cumnplen
+con el predicado f , ejemplo
+|#
 
 (define predicado-numero
-          (lambda (func-pred n lst)
-            (cond
-              [(func-pred (car lst)) (predicado-numero func-pred (- n 1) (filter (cdr lst) func-pred))]
-              [(= 0 n) #t]
-              [(not (func-pred (car lst))) (predicado-numero func-pred n (filter (cdr lst) func-pred))]
-              [else #f]
-)))
+  (lambda (func-pred n lst)
+    (if (= n (lenght-list (filtro func-pred lst)))
+      #T
+      #F
+    )))
 
-;funcion para filtrar los elementos que no hagan parte del predicado
-(define filter
-  (lambda (lst pred)
+(define filtro
+  (lambda (func-pred lst)
     (cond
-      [(null? (car lst)) '()]
-      [(pred (car lst)) (cons (car lst) (filter (cdr lst) pred))]
-      [else (filter (cdr lst) pred)])))
+      [(null? lst) '()]
+      [(func-pred (car lst))
+       (cons (car lst) (filtro func-pred (cdr lst)))]
+      [else
+       (filtro func-pred (cdr lst))])))
 
-(display (predicado-numero number? 5 '(0 1 1 2 "hola")))
+(display (filtro number? '(0 0 1 1 2 "hola" )))
+(newline)
 
+(define lenght-list
+  (lambda (lst)
+      (if (null? lst)
+          0
+          (+ 1 (lenght-list (cdr lst))))))
+
+(display (lenght-list '(1 2 3)))
+(newline)
+
+;pruebas
+(display (predicado-numero number? 5 '( 0 0 1 1 2 "hola")))
+(newline)
+(display (predicado-numero number? 4 '( 0 0 1 1 2 "hola" )))
