@@ -1,5 +1,8 @@
 #lang eopl
-;;=== Constructores ===
+
+;; <env-exp> ::= (empty-env)
+;;           ::= (extend-env <identificador> <scheme-value> <env-exp>)
+;;=== Constructores === - Representación del TAD
 
 (define empty-env
   (lambda ()
@@ -18,7 +21,7 @@
         [(= s 2) lv]
         [(= s 3) old-env]))))
 
-;;=== Observadores ===
+;;=== Observadores === - Interfaz
 
 ;;Predicados
 (define empty-env?
@@ -44,7 +47,12 @@
     (n 3)))
 
 ;;=== Area del programador ===
+;; Como podemos ver la función apply-env definida en el area del programador es exactamente igual
+;que en nuestro ejercicio anterior, en el cual usamos una rerpesentación basada en listas mientras que
+;en este una representación basada en procedimientos
 
+;Esto se debe a la abstracción, ya que el programado no tiene que lididar el como internamente estan
+;represetnados los datos, sino que simplemente hace uso de la interfaz
 (define apply-env
   (lambda (env val)
     (cond

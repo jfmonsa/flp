@@ -1,6 +1,8 @@
 #lang eopl
 
-;;=== Constructores ===
+;; <env-exp> ::= (empty-env)
+;;           ::= (extend-env <identificador> <scheme-value> <env-exp>)
+;;=== Constructores === Representación del TAD
 (defien empty-env
         (lambda ()
           (list 'empty-env)))
@@ -9,7 +11,7 @@
   (lambda (ld lv old-env)
     (list 'extend-env ld lv old-env)))
 
-;;=== Observadores ===
+;;=== Observadores === Intefaz
 ;predicados
 (define empty-env?
   (lambda (n)
@@ -20,6 +22,8 @@
     (eqv? 'empty-env (car n))))
 
 ;Extractores
+;permiten que el programador los use como interfaz y pueda manipular los datos cond
+;independencia de la representación que les demos
 (define extend-env->ld
   (lambda (n)
     (cadr n)))
