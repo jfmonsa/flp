@@ -105,28 +105,28 @@
 ; Contar elementos
 (define empty-record?
   (lambda (n)
-    (= (n 0) 'empty-record)))
+    (eqv? (n 0) 'empty-record)))
 (define non-empty-record?
   (lambda (n)
-    (= (n 0) 'non-empty-record)))
+    (eqv? (n 0) 'non-empty-record)))
 (define simple-item?
   (lambda (n)
-    (= (n 0) 'simple-item)))
+    (eqv? (n 0) 'simple-item)))
 (define list-item?
   (lambda (n)
-    (= (n 0) 'list-item)))
+    (eqv? (n 0) 'list-item)))
 (define item-num?
   (lambda (n)
-    (= (n 0) 'item-num)))
+    (eqv? (n 0) 'item-num)))
 (define item-sym?
   (lambda (n)
-    (= (n 0) 'item-sym)))
+    (eqv? (n 0) 'item-sym)))
 (define empty-list-item?
   (lambda (n)
-    (= (n 0) 'empty-list-item)))
+    (eqv? (n 0) 'empty-list-item)))
 (define non-empty-list-item?
   (lambda (n)
-    (= (n 0) 'non-empty-list-item)))
+    (eqv? (n 0) 'non-empty-list-item)))
 ;; ====== Extractores ========
 ;<element>
 ;  ::=<simple-item> simple-item(datum)
