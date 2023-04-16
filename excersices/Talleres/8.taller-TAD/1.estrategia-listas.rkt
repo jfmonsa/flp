@@ -159,23 +159,6 @@
   (lambda (exp)
     (caddr exp)))
 ;; ===== Area del programdor ====
-;<record>
-;  ::=’() empty-record
-;  ::= <symbol> <element> <record>  non-empty-record(key, elm, record)
-;<element>
-;  ::=<simple-item> simple-item(datum)
-;  ::=<list-item> list-item(datum)
-;<simple-item>
-;   ::= <number>
-;     item-num(datum)
-;   ::=<symbol>
-;     item-sym(dtaum)
-;<list-item>
-;    ::= ’()
-;       empty-list-item()
-;    ::=  <simple-item> <list-item>
-;       non-empty-list-item(elm, lst)
-;;ise ̃ne las siguientes funciones para cada representaci ́on:
 ;; 1. get-numbers: Retorna una lista con todos los n ́umeros que se encuentran dentro de la estructura,
 ;; esta lista debe ser plana
 (define get-numbers
