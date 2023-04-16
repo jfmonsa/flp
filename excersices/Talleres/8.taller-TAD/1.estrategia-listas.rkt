@@ -79,12 +79,6 @@
       (list? exp)
       (= (aux-contar-elm exp) 4)
       (eqv? (car exp) 'non-empty-record))))
-;pruebas
-;(display (empty-record? (empty-record))) ;t
-;(newline)
-;(display (empty-record? (non-empty-record 'y 6 (empty-record)))) ;f
-;(newline)
-;(display (non-empty-record? (non-empty-record 'y 6 (empty-record)))) ;t
 
 (define simple-item?
   (lambda (exp)
@@ -127,7 +121,6 @@
       (list? exp)
       (= (aux-contar-elm exp) 3)
       (eqv? (car exp) 'non-empty-list-item))))
-
 ;; ====== Extractores ========
 
 ;; Nota: los elementos vacios (empty-*) no tienen extractor
@@ -166,94 +159,49 @@
   (lambda (exp)
     (caddr exp)))
 ;; ===== Area del programdor ====
-;;ise ̃ne las siguientes funciones para cada representaci ́on:
-;; 1. get-numbers: Retorna una lista con todos los n ́umeros que se encuentran dentro de la estructura,
-;; esta lista debe ser plana
-;; 2. get-symbols: Retorna una lista con todos los s ́ımbolos que se encuentran dentro de la estructura,
-;; esta lista debe ser plan
-
-
 ;<record>
 ;  ::=’() empty-record
 ;  ::= <symbol> <element> <record>  non-empty-record(key, elm, record)
-;
 ;<element>
 ;  ::=<simple-item> simple-item(datum)
 ;  ::=<list-item> list-item(datum)
-;
 ;<simple-item>
 ;   ::= <number>
 ;     item-num(datum)
 ;   ::=<symbol>
 ;     item-sym(dtaum)
-;
 ;<list-item>
 ;    ::= ’()
 ;       empty-list-item()
 ;    ::=  <simple-item> <list-item>
 ;       non-empty-list-item(elm, lst)
-;<element>
-;(define simple-item->datum
-;  (lambda (exp)
-;    (cadr exp)))
-;(define list-item->datum
-;  (lambda (exp)
-;    (cadr exp)))
-;
-;;<simple-item>
-;(define item-num->datum
-;  (lambda (exp)
-;    (cadr exp)))
-;(define item-sym->datum
-;  (lambda (exp)
-;    (cadr exp)))
-;
-;;<list-item>
-;
-;(define non-empty-list-item->elm
-;  (lambda (exp)
-;    (cadr exp)))
-;(define non-empty-list-item->lst
-;  (lambda (exp)
-;    (caddr exp)))
-;(list-item
-;     (non-empty-list-item
-;      (simple-item (item-sym 'x))
-;      (non-empty-list-item
-;       (simple-item (item-num 4))
-;       (empty-list-item))))
-;00000000000000
+;;ise ̃ne las siguientes funciones para cada representaci ́on:
+;; 1. get-numbers: Retorna una lista con todos los n ́umeros que se encuentran dentro de la estructura,
+;; esta lista debe ser plana
 (define get-numbers
   (lambda (exp)
     (cond
       [(empty-record? exp) '()]
       [(non-empty-record? exp) ;llamado recursivo (registro)
-      (cons 
-        (get-numbers (non-empty-record->elm exp))
-        (get-numbers (non-empty-record->record exp)))]
-      
-      [(and (simple-item? exp) (number? (item-num->datum (simple-item->datum exp))))
-            (item-num->datum (simple-item->datum exp))]
-      [(list-item? exp);;Llamado recursivo (listas)
-       (cons
-        (get-numbers (non-empty-list-item->elm (list-item->datum exp)))
-        (get-numbers (non-empty-list-item->lst (list-item->datum exp))))]
+       (append
+               (get-numbers (non-empty-record->elm exp)) ;(1)
+               (get-numbers (non-empty-record->record exp)))]
+      ;En caso de obtener un elemento (1) dos casos posibles simple-item? o list-item?
+      ;simple-item -> si es un item que tiene como hijo un número
+      [(and (simple-item? exp) (item-num? (simple-item->datum exp)))
+       (list (item-num->datum (simple-item->datum exp)))
+       ]
+      ;list-item -> si es un list-item que tiene como primer elemento una lista no vacia
+      [(list-item? exp)
+       (get-numbers (list-item->datum exp))]
+      [(non-empty-list-item? exp)
+       (append (get-numbers (non-empty-list-item->elm exp))
+               (get-numbers (non-empty-list-item->lst exp)))]
+      ;En otro caso
       [else '()]
       )))
 
-(define get-numbers-lista
-  (lambda (exp)
-    (cond
-      [(empt
 ;pruebas
-(define exp
-  (list-item
-     (non-empty-list-item
-      (simple-item (item-sym 'x))
-      (non-empty-list-item
-       (simple-item (item-num 4))
-       (empty-list-item)))))
-
 (define reg1
   (non-empty-record
    'a
@@ -270,8 +218,35 @@
     )))
 
 (display (get-numbers reg1))
-
-
-
-
-
+;; 2. get-symbols: Retorna una lista con todos los s ́ımbolos que se encuentran dentro de la estructura,
+;; esta lista debe ser plan
+(define get-symbol
+  (lambda (exp)
+    (cond
+      [(empty-record? exp) '()]
+      [(non-empty-record? exp) ;llamado recursivo (registro)
+       (append
+        ;identificador del record debe agregarse a la lista de resultado
+        (list (non-empty-record->key exp))
+        (get-symbol (non-empty-record->elm exp)) ;(1)
+        (get-symbol (non-empty-record->record exp)))
+       ]
+      ;En caso de obtener un elemento (1) dos casos posibles simple-item? o list-item?
+      ;simple-item -> si es un item que tiene como hijo un número 
+;      [(simple-item? exp) 
+;       (get-symbol (simple-item->datum exp))]
+;      [(item-sym? exp) (list (item-sym->datum exp))]
+      [(and (simple-item? exp) (item-sym? (simple-item->datum exp)))
+       (list (item-sym->datum (simple-item->datum exp)))]
+      ;list-item -> si es un list-item que tiene como primer elemento una lista no vacia
+      [(list-item? exp) (get-symbol (list-item->datum exp))]
+      [(non-empty-list-item? exp)
+       (append
+        (get-symbol (non-empty-list-item->elm exp))
+        (get-symbol (non-empty-list-item->lst exp)))]
+      ;En otro caso
+      [else '()]
+      )))
+;pruebas
+(newline)
+(display (get-symbol reg1))
