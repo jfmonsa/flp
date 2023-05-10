@@ -48,6 +48,7 @@
 ;; ===== Area del programdor ====
 ;; 1. get-numbers: Retorna una lista con todos los n ́umeros que se encuentran dentro de la estructura,
 ;; esta lista debe ser plana
+
 (define get-numbers
   (lambda (exp)
     (cond
