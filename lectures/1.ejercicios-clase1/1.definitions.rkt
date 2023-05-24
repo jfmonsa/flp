@@ -7,6 +7,12 @@
 (* (+ 5 2) (* 2 3))
 
 ; Solamente ilustrativo, vamos a procurar usar en el curso funciones anonimas
+; la ventaja de las funciones anonimas es que son las a diferencia de una función
+; normal, estas las podremos pasar como argumento a otra función para que la otra función
+; la invoque en su interior
+
+;Mientras que si intentamos lo anterior con una función normal, la función se ejecutará
+;en el momento en que la pasemos como argumento y no podrá ser utilizada por la otra función
 (define (function1 x y)
   (+ x y))
 
